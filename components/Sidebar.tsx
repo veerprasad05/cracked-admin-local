@@ -3,16 +3,16 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  BarChart3,
   ImageIcon,
   LayoutDashboard,
   MessageSquareText,
-  Sparkles,
   Users,
 } from "lucide-react";
 import SidebarUserMenu from "@/components/SidebarUserMenu";
 
 const navItems = [
-  { href: "/hello-world", label: "Hello World", icon: Sparkles },
+  { href: "/stats", label: "Stats", icon: BarChart3 },
   { href: "/images", label: "Images", icon: ImageIcon },
   { href: "/captions", label: "Captions", icon: MessageSquareText },
   { href: "/profiles", label: "Profiles", icon: Users },

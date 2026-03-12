@@ -77,7 +77,7 @@ export async function middleware(request: NextRequest) {
 
   if (pathname === "/") {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/hello-world";
+    redirectUrl.pathname = "/stats";
     redirectUrl.search = "";
     return withSupabaseCookies(NextResponse.redirect(redirectUrl), response);
   }

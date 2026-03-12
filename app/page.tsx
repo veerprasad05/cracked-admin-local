@@ -7,7 +7,7 @@ export default async function HomePage() {
   const { isAuthenticated, isSuperadmin } = await getAdminAccessState();
 
   if (isSuperadmin) {
-    redirect("/hello-world");
+    redirect("/stats");
   }
 
   return (
