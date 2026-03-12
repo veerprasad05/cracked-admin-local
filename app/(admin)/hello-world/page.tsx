@@ -1,15 +1,6 @@
 import TextType from "@/ui/TextType";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 
-export default async function HelloWorldPage() {
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.auth.getUser();
-
-  if (!data.user) {
-    redirect("/");
-  }
-
+export default function HelloWorldPage() {
   return (
     <section className="mx-auto flex min-h-[70vh] w-full max-w-5xl items-center justify-center">
       <div className="rounded-[2rem] bg-[#15151b]/75 px-8 py-12 ring-1 ring-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),_0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur">

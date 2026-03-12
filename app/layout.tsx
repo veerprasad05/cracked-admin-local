@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Oxanium, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
 
 const headingFont = Oxanium({
   subsets: ["latin"],
@@ -37,15 +36,7 @@ export default function RootLayout({
           "[font-family:var(--font-body)]",
         ].join(" ")}
       >
-        <div className="min-h-screen w-full px-6 py-6">
-          <div className="flex min-h-[calc(100vh-3rem)] gap-6 max-lg:flex-col">
-            <aside className="w-72 shrink-0 max-lg:w-full">
-              <Sidebar />
-            </aside>
-
-            <main className="flex-1 pt-8 pb-12 max-lg:pt-0">{children}</main>
-          </div>
-        </div>
+        {children}
       </body>
     </html>
   );
