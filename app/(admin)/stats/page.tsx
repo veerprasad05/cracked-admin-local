@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ComponentType, ReactNode } from "react";
 import { ArrowRight, BarChart3, ImageIcon, MessageSquareText, Users } from "lucide-react";
 import { Card, type CaptionEntry } from "@/components/Card";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -7,8 +8,8 @@ type StatBlockProps = {
   href: string;
   eyebrow: string;
   title: string;
-  icon: React.ComponentType<{ className?: string }>;
-  children: React.ReactNode;
+  icon: ComponentType<{ className?: string }>;
+  children: ReactNode;
 };
 
 function StatBlock({
@@ -219,7 +220,7 @@ export default async function StatsPage() {
         </StatBlock>
 
         <StatBlock
-          href="/profiles"
+          href="/users"
           eyebrow="Profiles"
           title="Profiles"
           icon={Users}

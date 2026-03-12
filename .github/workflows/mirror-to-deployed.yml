@@ -1,0 +1,19 @@
+name: Mirror to private repo
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout public repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Push to private repo (force)
+        run: |
+          git push --force https://${{ secrets.PRIVATE_REPO_PAT }}@github.com/veerprasad05/cracked-admin-deployed.git HEAD:refs/heads/main
