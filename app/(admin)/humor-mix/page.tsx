@@ -54,6 +54,7 @@ export default async function HumorMixPage() {
             editLabel="Edit Humor Mix Row"
             deleteLabel="Delete Humor Mix Row"
             createdAtField="created_datetime_utc"
+            modifiedAtField="modified_datetime_utc"
             allowCreate={false}
             allowDelete={false}
           />

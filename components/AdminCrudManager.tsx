@@ -4,6 +4,11 @@ import * as React from "react";
 import { startTransition } from "react";
 import { Pencil, Plus, Trash2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import {
+  applyInsertAuditFields,
+  applyUpdateAuditFields,
+  getAuthenticatedUserId,
+} from "@/lib/supabase/audit";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type CrudFieldType = "text" | "textarea" | "number" | "checkbox";
@@ -202,28 +207,34 @@ export default function AdminCrudManager({
 
       const supabase = createSupabaseBrowserClient();
       const timestamp = new Date().toISOString();
+      const userId = await getAuthenticatedUserId(supabase);
       const payload = buildPayload(fields, draft);
 
       if (isCreating) {
-        if (createdAtField) {
-          payload[createdAtField] = timestamp;
-        }
+        const insertPayload = applyInsertAuditFields(payload, {
+          createdAtField,
+          modifiedAtField,
+          timestamp,
+          userId,
+        });
 
         const { error: insertError } = await supabase
           .from(tableName)
-          .insert(payload);
+          .insert(insertPayload);
 
         if (insertError) {
           throw new Error(insertError.message);
         }
       } else if (editingRow) {
-        if (modifiedAtField) {
-          payload[modifiedAtField] = timestamp;
-        }
+        const updatePayload = applyUpdateAuditFields(payload, {
+          modifiedAtField,
+          timestamp,
+          userId,
+        });
 
         const { error: updateError } = await supabase
           .from(tableName)
-          .update(payload)
+          .update(updatePayload)
           .eq("id", editingRow.id);
 
         if (updateError) {

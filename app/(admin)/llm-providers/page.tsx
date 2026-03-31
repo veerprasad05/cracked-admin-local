@@ -40,6 +40,7 @@ export default async function LlmProvidersPage() {
             editLabel="Edit LLM Provider"
             deleteLabel="Delete LLM Provider"
             createdAtField="created_datetime_utc"
+            modifiedAtField="modified_datetime_utc"
           />
         )}
       </section>

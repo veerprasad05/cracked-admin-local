@@ -47,6 +47,7 @@ export default async function AllowedSignupDomainsPage() {
             editLabel="Edit Allowed Signup Domain"
             deleteLabel="Delete Allowed Signup Domain"
             createdAtField="created_datetime_utc"
+            modifiedAtField="modified_datetime_utc"
           />
         )}
       </section>

@@ -5,6 +5,10 @@ import { startTransition } from "react";
 import { Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
+import {
+  applyUpdateAuditFields,
+  getAuthenticatedUserId,
+} from "@/lib/supabase/audit";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type ImageEditModalProps = {
@@ -55,13 +59,21 @@ export default function ImageEditModal({
 
       const supabase = createSupabaseBrowserClient();
       const timestamp = new Date().toISOString();
-      const { error: updateError } = await supabase
-        .from("images")
-        .update({
+      const userId = await getAuthenticatedUserId(supabase);
+      const payload = applyUpdateAuditFields(
+        {
           is_public: nextIsPublic,
           is_common_use: nextIsCommonUse,
-          modified_datetime_utc: timestamp,
-        })
+        },
+        {
+          modifiedAtField: "modified_datetime_utc",
+          timestamp,
+          userId,
+        }
+      );
+      const { error: updateError } = await supabase
+        .from("images")
+        .update(payload)
         .eq("id", imageId);
 
       if (updateError) {
@@ -119,7 +131,8 @@ export default function ImageEditModal({
 
                 <p className="mt-4 max-w-lg text-sm text-zinc-300/75">
                   Toggle the image visibility flags for this row. Saving updates
-                  `is_public`, `is_common_use`, and `modified_datetime_utc`.
+                  `is_public`, `is_common_use`, `modified_datetime_utc`, and
+                  `modified_by_user_id`.
                 </p>
 
                 <div className="mt-6 space-y-4 rounded-2xl border border-white/10 bg-black/30 p-5">

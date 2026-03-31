@@ -79,6 +79,7 @@ export default async function LlmModelsPage() {
             editLabel="Edit LLM Model"
             deleteLabel="Delete LLM Model"
             createdAtField="created_datetime_utc"
+            modifiedAtField="modified_datetime_utc"
           />
         )}
       </section>

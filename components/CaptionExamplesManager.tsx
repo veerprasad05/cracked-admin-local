@@ -5,12 +5,17 @@ import { startTransition } from "react";
 import { Pencil, Plus, Trash2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/Card";
+import {
+  applyInsertAuditFields,
+  applyUpdateAuditFields,
+  getAuthenticatedUserId,
+} from "@/lib/supabase/audit";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type CaptionExampleRow = {
   id: number;
   created_datetime_utc: string;
-  modified_datetime_utc: string | null;
+  modified_datetime_utc: string;
   image_description: string;
   caption: string;
   explanation: string;
@@ -124,16 +129,24 @@ export default function CaptionExamplesManager({
 
       const supabase = createSupabaseBrowserClient();
       const timestamp = new Date().toISOString();
+      const userId = await getAuthenticatedUserId(supabase);
       const priority = Number(createDraft.priority);
-      const payload = {
-        created_datetime_utc: timestamp,
-        image_description: createDraft.image_description,
-        caption: createDraft.caption,
-        explanation: createDraft.explanation,
-        priority: Number.isFinite(priority) ? priority : 0,
-        image_id:
-          createDraft.image_id.trim().length > 0 ? createDraft.image_id : null,
-      };
+      const payload = applyInsertAuditFields(
+        {
+          image_description: createDraft.image_description,
+          caption: createDraft.caption,
+          explanation: createDraft.explanation,
+          priority: Number.isFinite(priority) ? priority : 0,
+          image_id:
+            createDraft.image_id.trim().length > 0 ? createDraft.image_id : null,
+        },
+        {
+          createdAtField: "created_datetime_utc",
+          modifiedAtField: "modified_datetime_utc",
+          timestamp,
+          userId,
+        }
+      );
 
       const { error: insertError } = await supabase
         .from("caption_examples")
@@ -166,13 +179,22 @@ export default function CaptionExamplesManager({
       setError(null);
 
       const supabase = createSupabaseBrowserClient();
-      const { error: updateError } = await supabase
-        .from("caption_examples")
-        .update({
+      const timestamp = new Date().toISOString();
+      const userId = await getAuthenticatedUserId(supabase);
+      const payload = applyUpdateAuditFields(
+        {
           caption: editDraft.caption,
           explanation: editDraft.explanation,
-          modified_datetime_utc: new Date().toISOString(),
-        })
+        },
+        {
+          modifiedAtField: "modified_datetime_utc",
+          timestamp,
+          userId,
+        }
+      );
+      const { error: updateError } = await supabase
+        .from("caption_examples")
+        .update(payload)
         .eq("id", editingRow.id);
 
       if (updateError) {
