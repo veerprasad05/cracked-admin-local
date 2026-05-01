@@ -64,7 +64,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full flex-col rounded-2xl bg-[#15151b]/90 p-4 backdrop-blur ring-1 ring-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),_0_18px_50px_rgba(0,0,0,0.7)]">
+    <div className="flex h-full flex-col overflow-y-auto rounded-2xl bg-[#15151b]/90 p-4 backdrop-blur ring-1 ring-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),_0_18px_50px_rgba(0,0,0,0.7)]">
       <div className="mb-5 flex items-center justify-center gap-3 text-center text-[0.7rem] uppercase tracking-[0.4em] text-orange-300/80 [font-family:var(--font-heading)]">
         <LayoutDashboard className="h-4 w-4" />
         <span>Crackd Admin</span>
